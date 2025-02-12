@@ -20,7 +20,7 @@ services:
       - dev
 
   airflow-webserver:
-    image: apache/airflow:2.10.5
+    build: .
     container_name: airflow_webserver
     restart: always
     depends_on:
@@ -28,14 +28,19 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW__DATABASE__SQL_ALCHEMY_CONN}
+      AIRFLOW_VAR_SAMPLE_JSON_VAR: ${AIRFLOW_VAR_SAMPLE_JSON_VAR}
     ports:
       - "8080:8080"
     command: ["webserver"]
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./plugins:/opt/airflow/plugins
+      - ./logs:/opt/airflow/logs
     networks:
       dev:
 
   airflow-scheduler:
-    image: apache/airflow:2.10.5
+    build: .
     container_name: airflow_scheduler
     restart: always
     depends_on:
@@ -43,12 +48,18 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW__DATABASE__SQL_ALCHEMY_CONN}
+      AIRFLOW_VAR_SAMPLE_JSON_VAR: ${AIRFLOW_VAR_SAMPLE_JSON_VAR}
     command: ["scheduler"]
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./plugins:/opt/airflow/plugins
+      - ./logs:/opt/airflow/logs
+
     networks:
       dev:
 
   airflow-init:
-    image: apache/airflow:2.10.5
+    build: .
     container_name: airflow_init
     restart: on-failure
     depends_on:
