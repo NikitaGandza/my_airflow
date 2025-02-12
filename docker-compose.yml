@@ -56,7 +56,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: ${AIRFLOW__CORE__EXECUTOR}
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW__DATABASE__SQL_ALCHEMY_CONN}
-    entrypoint: ["/bin/bash", "-c", "airflow db init && airflow db migrate && airflow users create --username airflow --password airflow --role Admin --firstname airflow --lastname airflow --email airflow@airflow.com"]
+    entrypoint: ["/bin/bash", "-c", "airflow db init && airflow db migrate && airflow users create --username $AIRFLOW__USER --password $AIRFLOW__PASSWORD --role Admin --firstname $AIRFLOW__FIRST_NAME --lastname $AIRFLOW__LAST_NAME --email $AIRFLOW__EMAIL"]
     networks:
       dev:
 
